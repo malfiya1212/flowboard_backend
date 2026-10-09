@@ -1,24 +1,29 @@
 {
-  "dependencies": {
-    "cors": "^2.8.6",
-    "dotenv": "^18.0.6",
-    "express": "^5.2.1",
-    "pg": "^8.23.1"
-  },
-  "name": "flowboard_backedn",
-  "version": "1.0.0",
-  "main": "index.js",
-  "devDependencies": {
-    "@types/express": "^5.0.6",
-    "@types/node": "^26.6.4",
-    "tsx": "^4.23.15",
-    "typescript": "^7.0.2"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": ""
+    "name": "flowboard_backend",
+    "version": "1.0.0",
+    "type": "module",
+    "main": "dist/app.js",
+    "scripts": {
+        "dev": "tsx watch src/app.ts",
+        "build": "tsc",
+        "start": "node dist/app.js"
+    },
+    "dependencies": {
+        "bcrypt": "^5.1.1",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.5",
+        "express": "^4.19.2",
+        "jsonwebtoken": "^9.0.2",
+        "pg": "^8.11.3"
+    },
+    "devDependencies": {
+        "@types/bcrypt": "^5.0.2",
+        "@types/cors": "^2.8.17",
+        "@types/express": "^4.17.21",
+        "@types/jsonwebtoken": "^9.0.6",
+        "@types/node": "^20.19.43",
+        "@types/pg": "^8.11.2",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.3.3"
+    }
 }
