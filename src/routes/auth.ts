@@ -1,0 +1,13 @@
+import { Router } from 'express';
+import { signup, signin, verifyCode, verifyEmailCode } from '../controllers/authController.js'; 
+
+const router = Router();
+
+router.post('/signup', signup);
+router.post('/signin', signin);
+router.post('/login', signin);
+router.post('/verify-code', verifyCode);
+router.post('/verify-email-code', verifyEmailCode);
+router.post('/verify', verifyCode);
+
+export default router;

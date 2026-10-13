@@ -1,36 +1,45 @@
 import type { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET: string = process.env.JWT_SECRET || 'flowboard_enterprise_super_secret_key_2026';
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret';
 
 export interface AuthRequest extends Request {
   user?: {
     id: number;
-    email: string;
-    role: string;
+    email?: string;
+    role?: string;
   };
 }
 
-export const verifyToken = (req: AuthRequest, res: Response, next: NextFunction): void => {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    res.status(401).json({ error: 'Access denied. No token provided.' });
-    return;
-  }
-
-  const token = authHeader.split(' ')[1];
+export function verifyToken(req: AuthRequest, res: Response, next: NextFunction) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
 
   if (!token) {
-    res.status(401).json({ error: 'Access denied. No token provided.' });
-    return;
+    return res.status(401).json({ error: 'Access denied. No token provided.' });
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as unknown as { id: number; email: string; role: string };
-    req.user = decoded;
+    const verified = jwt.verify(token, JWT_SECRET) as { id: number; email: string; role: string };
+    req.user = verified;
     next();
   } catch (error) {
-    res.status(403).json({ error: 'Invalid or expired token.' });
+    return res.status(403).json({ error: 'Invalid or expired token.' });
   }
-};
+}
+
+export function optionalToken(req: AuthRequest, res: Response, next: NextFunction) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (token) {
+    try {
+      const verified = jwt.verify(token, JWT_SECRET) as { id: number; email: string; role: string };
+      req.user = verified;
+    } catch {
+      // Ignore invalid token in optional mode
+    }
+  }
+
+  next();
+}
